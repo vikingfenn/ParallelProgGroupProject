@@ -5,6 +5,8 @@
 
 #define SIZE 128
 
+pthread_mutex_t lock;
+
 static __inline__ unsigned long long rdtsc(void){
   unsigned long long int result = 0;
   unsigned long int upper, lower, tmp;
@@ -24,6 +26,8 @@ static __inline__ unsigned long long rdtsc(void){
 }
 
 void * tm_run (void * arg);
+void * mutex_run (void * arg);
+void * basic_run (void * arg);
 
 int main(int argc, char** argv)
 {
@@ -41,8 +45,15 @@ int main(int argc, char** argv)
     int t;
     for (t = 0; t < threads; t++){
         //printf("New Thread!\n");
-        if (pthread_create(&t_id[t],&attr,&tm_run,&a))\
-            printf("\nError during thread creation!\n");
+        if (myrank < numprocs/3)
+          if (pthread_create(&t_id[t],&attr,&tm_run,&a))
+              printf("\nError during thread creation!\n");
+        else if (myrank >= numprocs/3 && myrank < (numprocs*2)/3)
+          if (pthread_create(&t_id[t],&attr,&mutex_run,&a))
+              printf("\nError during thread creation!\n");
+        else
+          if (pthread_create(&t_id[t],&attr,&basic_run,&a))
+              printf("\nError during thread creation!\n");
     }
     pthread_attr_destroy(&attr);//printf("%i: attr destroyed\n",myrank);
     //Threads join with original again
@@ -67,49 +78,79 @@ void * tm_run (void * arg){
     int b[SIZE];
     int * a = arg;
 
-    int r;
-    for (r=0; r<3; r++)
+    unsigned long long t0, t1;
+
+    for (v=0; v<SIZE; v++)
     {
-        unsigned long long t0, t1;
-
-        for (v=0; v<SIZE; v++)
-        {
-            a[v] = v;
-            b[v] = -v;
-        }
-
-        t0 = rdtsc();
-        for (v=0; v<SIZE; v++)
-          for (w=0; w<SIZE; w++)
-            for (z=0; z<SIZE; z++)
-            {
-              #pragma tm_atomic
-              {
-                a[z] = a[w] + b[v];
-              }
-            }
-
-        t1 = rdtsc();
-        printf("tm_atomic    ran in %f seconds \n", (float)(t1-t0)/1600000000);
-
-        for (v=0; v<SIZE; v++)
-        {
-            a[v] = v;
-            b[v] = -v;
-        }
-
-        t0 = rdtsc();
-        for (v=0; v<SIZE; v++)
-          for (w=0; w<SIZE; w++)
-            for (z=0; z<SIZE; z++)
-            {
-              {
-                a[z] = a[w] + b[v];
-              }
-            }
-
-        t1 = rdtsc();
-        printf("non-atomic   ran in %f cycles \n", (float)(t1-t0)/1600000000);
+        a[v] = v;
+        b[v] = -v;
     }
+    // Transactional Memory Run
+    t0 = rdtsc();
+    for (v=0; v<SIZE; v++)
+      for (w=0; w<SIZE; w++)
+        for (z=0; z<SIZE; z++)
+        {
+          #pragma tm_atomic
+          {
+            a[z] = a[w] + b[v];
+          }
+        }
+
+    t1 = rdtsc();
+    printf("tm_atomic    ran in %f seconds \n", (float)(t1-t0)/1600000000);
+    return NULL;
+}
+void * mutex_run (void * arg){
+
+    int v, w, z;
+    int b[SIZE];
+    int * a = arg;
+    unsigned long long t0, t1;
+
+        for (v=0; v<SIZE; v++)
+        {
+            a[v] = v;
+            b[v] = -v;
+        }
+        //Pthread Mutex Lock
+        t0 = rdtsc();
+        
+        for (v=0; v<SIZE; v++)
+          for (w=0; w<SIZE; w++)
+            for (z=0; z<SIZE; z++)
+            {
+              pthread_mutex_lock(&lock);
+              a[z] = a[w] + b[v];
+              pthread_mutex_unlock(&lock);
+            }
+        t1 = rdtsc();
+        printf("mutex_lock   ran in %f seconds \n", (float)(t1-t0)/1600000000);
+        return NULL;
+}        
+void * basic_run (void * arg){
+
+    int v, w, z;
+    int b[SIZE];
+    int * a = arg;
+    unsigned long long t0, t1;
+        for (v=0; v<SIZE; v++)
+        {
+            a[v] = v;
+            b[v] = -v;
+        }
+        //No lock or TM run
+        t0 = rdtsc();
+        for (v=0; v<SIZE; v++)
+          for (w=0; w<SIZE; w++)
+            for (z=0; z<SIZE; z++)
+            {
+              {
+                a[z] = a[w] + b[v];
+              }
+            }
+
+        t1 = rdtsc();
+        printf("non-atomic   ran in %f seconds \n", (float)(t1-t0)/1600000000);
     return NULL;
 }
