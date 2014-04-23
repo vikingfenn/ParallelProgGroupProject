@@ -67,8 +67,8 @@ int main(int argc, char** argv)
             //printf("%i: %i: thread joined successfully\n",myrank,i);
         }
     }
-    if (myrank==0)printf("Transactional memory test completed\n");
     MPI_Finalize();
+    if (myrank==0)printf("Transactional memory test completed\n");
     return 0;
 }
 
