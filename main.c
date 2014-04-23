@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
     int a[SIZE];
 
-    int threads = 10;
+    int threads = 2;
     pthread_t t_id[threads];
     pthread_attr_t attr;
     pthread_attr_init(&attr );
@@ -46,13 +46,13 @@ int main(int argc, char** argv)
     for (t = 0; t < threads; t++){
         //printf("New Thread!\n");
         if (myrank < numprocs/3)
-          if (pthread_create(&t_id[t],&attr,&tm_run,&a))
+          if (pthread_create(&t_id[t],&attr,&tm_run,(void*)&a))
               printf("\nError during thread creation!\n");
-        else if (myrank >= numprocs/3 && myrank < (numprocs*2)/3)
-          if (pthread_create(&t_id[t],&attr,&mutex_run,&a))
+        else if (myrank < (numprocs*2)/3)
+          if (pthread_create(&t_id[t],&attr,&mutex_run,(void*)&a))
               printf("\nError during thread creation!\n");
         else
-          if (pthread_create(&t_id[t],&attr,&basic_run,&a))
+          if (pthread_create(&t_id[t],&attr,&basic_run,(void*)&a))
               printf("\nError during thread creation!\n");
     }
     pthread_attr_destroy(&attr);//printf("%i: attr destroyed\n",myrank);
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
             printf("%i: Thread %i exited with error %i .\n",myrank,t,rv);
         }
         else{
-            //printf("%i: %i: thread joined successfully\n",myrank,i);
+            printf("%i: %i: thread joined successfully\n",myrank,t);
         }
     }
     MPI_Finalize();
@@ -82,9 +82,11 @@ void * tm_run (void * arg){
 
     for (v=0; v<SIZE; v++)
     {
-        a[v] = v;
+       // a[v] = v;
         b[v] = -v;
+        printf("tm %i: b = %i\n",v,b[v]);
     }
+    printf("For loop done\n");
     // Transactional Memory Run
     t0 = rdtsc();
     for (v=0; v<SIZE; v++)
@@ -99,6 +101,7 @@ void * tm_run (void * arg){
 
     t1 = rdtsc();
     printf("tm_atomic    ran in %f seconds \n", (float)(t1-t0)/1600000000);
+    pthread_exit(NULL);
     return NULL;
 }
 void * mutex_run (void * arg){
@@ -110,12 +113,12 @@ void * mutex_run (void * arg){
 
         for (v=0; v<SIZE; v++)
         {
-            a[v] = v;
+            //a[v] = v;
             b[v] = -v;
+            printf("mu %i: b = %i\n",v,b[v]);
         }
         //Pthread Mutex Lock
         t0 = rdtsc();
-        
         for (v=0; v<SIZE; v++)
           for (w=0; w<SIZE; w++)
             for (z=0; z<SIZE; z++)
@@ -126,8 +129,9 @@ void * mutex_run (void * arg){
             }
         t1 = rdtsc();
         printf("mutex_lock   ran in %f seconds \n", (float)(t1-t0)/1600000000);
+        pthread_exit(NULL);
         return NULL;
-}        
+}
 void * basic_run (void * arg){
 
     int v, w, z;
@@ -136,8 +140,9 @@ void * basic_run (void * arg){
     unsigned long long t0, t1;
         for (v=0; v<SIZE; v++)
         {
-            a[v] = v;
+            //a[v] = v;
             b[v] = -v;
+            printf("na %i: b = %i\n",v,b[v]);
         }
         //No lock or TM run
         t0 = rdtsc();
@@ -152,5 +157,6 @@ void * basic_run (void * arg){
 
         t1 = rdtsc();
         printf("non-atomic   ran in %f seconds \n", (float)(t1-t0)/1600000000);
+    pthread_exit(NULL);
     return NULL;
 }
