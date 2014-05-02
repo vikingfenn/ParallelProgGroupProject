@@ -1,9 +1,10 @@
 #!/bin/bash
+rm results.txt
 module load xl
 mpixlc_r -g -qasm -qtm -lpthread main.c -o tm_test
 if [ $? -eq 0 ]
   then
-  for NODES in 63 510 1023
+  for NODES in 63 510 1023 do
 	if [ $NODES -lt 64 ]; then
 		PARTITION="small"
 	elif [ $NODES -lt 512 ]; then
