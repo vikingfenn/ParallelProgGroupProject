@@ -3,7 +3,7 @@
 #include <mpi.h>
 #include <pthread.h>
 
-#define SIZE 400
+#define SIZE 8
 
 pthread_mutex_t lock;
 
@@ -29,7 +29,7 @@ void * tm_run(void * arg);
 void * mutex_run(void * arg);
 void * basic_run(void * arg);
 
-int threads = 20;
+int threads = 2;
 
 int main(int argc, char** argv) {
 
@@ -66,15 +66,21 @@ int main(int argc, char** argv) {
     //printf("is this working\n");
     for (t = 0; t < threads; t++) {
         //printf("New Thread!\n");
-        if (myrank < numprocs / 3)
+        if (myrank < numprocs / 3){
             if (pthread_create(&t_id[t], &attr, &tm_run, (void*) &a))
                 printf("\nError during thread creation!\n");
+                break;
+        }
         if (myrank < 2 * numprocs / 3) {
             if (pthread_create(&t_id[t], &attr, &mutex_run, (void*) &a))
                 printf("\nError during thread creation!\n");
-        } else
+                break;
+        } 
+        else {
             if (pthread_create(&t_id[t], &attr, &basic_run, (void*) &a))
-            printf("\nError during thread creation!\n");
+                printf("\nError during thread creation!\n");
+                break;
+        }
     }
     pthread_attr_destroy(&attr); //printf("%i: attr destroyed\n",myrank);
     //Threads join with original again
@@ -147,13 +153,13 @@ void * tm_run(void * arg) {
         b[v] = -v;
      //   printf("tm %i: b = %i\n", v, b[v]);
     }
-   // printf("For loop done\n");
+    // printf("For loop done\n");
     // Transactional Memory Run
     t0 = rdtsc();
     for (v = 0; v < SIZE; v++)
         for (w = 0; w < SIZE; w++)
             for (z = 0; z < SIZE; z++) {
-            #pragma tm_atomic
+                #pragma tm_atomic
                 {
                     a[z] = a[w] + b[v];
                 }
@@ -161,9 +167,9 @@ void * tm_run(void * arg) {
 
     t1 = rdtsc();
     *runtime = (float) (t1 - t0) / 1600000000;
-    //printf("tm_atomic    ran in %f seconds \n", (float) (t1 - t0) / 1600000000);
+    printf("tm_atomic    ran in %f seconds \n", (float) (t1 - t0) / 1600000000);
     pthread_exit(runtime);
-    return NULL;
+    return (void*)runtime;
 }
 
 void * mutex_run(void * arg) {
@@ -191,9 +197,9 @@ void * mutex_run(void * arg) {
             }
     t1 = rdtsc();
     *runtime = (float) (t1 - t0) / 1600000000;
-    //printf("mutex_lock   ran in %f seconds \n", *runtime);
+    printf("mutex_lock   ran in %f seconds \n", *runtime);
     pthread_exit(runtime);
-    return NULL;
+    return (void*)runtime;
 }
 
 void * basic_run(void * arg) {
@@ -202,7 +208,7 @@ void * basic_run(void * arg) {
     float test = 1.0;
     int b[SIZE];
     int * a = arg;
-    float * runtime = (float *) malloc(sizeof (float));
+    float * runtime = (float *) malloc (sizeof(float));
     unsigned long long t0, t1;
     for (v = 0; v < SIZE; v++) {
         a[v] = v;
@@ -221,7 +227,7 @@ void * basic_run(void * arg) {
 
     t1 = rdtsc();
     *runtime = (float) (t1 - t0) / 1600000000;
-    //printf("non-atomic   ran in %f seconds \n", *runtime);
+    printf("non-atomic   ran in %f seconds \n", *runtime);
     pthread_exit(runtime);
-    return NULL;
-}
+    return (void*)runtime;
+} 
