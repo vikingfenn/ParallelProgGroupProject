@@ -1,7 +1,7 @@
 #!/bin/bash
-rm results.txt
 module load xl
 mpixlc_r -g -qasm -qtm -lpthread main.c -o tm_test
+rm results.txt
 if [ $? -eq 0 ]
   then
   for NODES in 63 510 1023 do
@@ -12,7 +12,7 @@ if [ $? -eq 0 ]
 	else
 		PARTITION="large"
 	fi
-        srun --partition=$PARTITION --time=15 --overcommit --runjob-opts="--mapping TEDCBA" --nodes=$NODES --ntasks-per-node=16 ./tm_test >> results.txt
+        srun --partition=$PARTITION --time=15 --runjob-opts="--mapping TEDCBA" --nodes=$NODES ./tm_test >> results.txt
 	if [ $? -ne 0 ] 
 	then
 		echo "Error!"
