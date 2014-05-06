@@ -3,26 +3,26 @@
 #include <mpi.h>
 #include <pthread.h>
 
-#define SIZE 8
+#define SIZE 128
 
 pthread_mutex_t lock;
 
-static __inline__ unsigned long long rdtsc(void) {
-    unsigned long long int result = 0;
-    unsigned long int upper, lower, tmp;
-    __asm__ volatile(
-            "0: \n"
-            "\tmftbu %0 \n"
-            "\tmftb %1 \n"
-            "\tmftbu %2 \n"
-            "\tcmpw %2,%0 \n"
-            "\tbne 0b \n"
-            : "=r"(upper), "=r"(lower), "=r"(tmp)
-            );
-    result = upper;
-    result = result << 32;
-    result = result | lower;
-    return (result);
+static __inline__ unsigned long long rdtsc(void){
+  unsigned long long int result = 0;
+  unsigned long int upper, lower, tmp;
+  __asm__ volatile(
+                "0: \n"
+                "\tmftbu %0 \n"
+                "\tmftb %1 \n"
+                "\tmftbu %2 \n"
+                "\tcmpw %2,%0 \n"
+                "\tbne 0b \n"
+                : "=r"(upper),"=r"(lower),"=r"(tmp)
+      );
+  result = upper;
+  result = result << 32;
+  result = result|lower;
+  return (result);
 }
 
 void * tm_run(void * arg);
@@ -33,23 +33,15 @@ int threads = 2;
 
 int main(int argc, char** argv) {
 
-    int myrank, numprocs, subgroup_rank;
+    int myrank, numprocs;
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
     MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-    MPI_Comm mu_comm, tm_comm, ba_comm, copy_comm;
-    MPI_Group original, mu_group, tm_group, ba_group;
 
 
     int *ranks1 = malloc((numprocs / 3)*(sizeof (int)));
     int *ranks2 = malloc((numprocs / 3)*(sizeof (int)));
     int *ranks3 = malloc((numprocs / 3)*(sizeof (int)));
-
-    MPI_Comm_dup(MPI_COMM_WORLD, &copy_comm);
-    MPI_Comm_group(copy_comm, &original);
-    MPI_Comm_group(copy_comm, &tm_group);
-    MPI_Comm_group(copy_comm, &mu_group);
-    MPI_Comm_group(copy_comm, &ba_group);
 
     int a[SIZE], i;
     float tm_runtime = 0.0;
@@ -62,24 +54,28 @@ int main(int argc, char** argv) {
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     int t;
+    int k;
     float resb = 0.0,rest=0.0,resm=0.0;
     //printf("is this working\n");
     for (t = 0; t < threads; t++) {
-        //printf("New Thread!\n");
+        printf("%d New Thread %d!\n", myrank, t);
         if (myrank < numprocs / 3){
-            if (pthread_create(&t_id[t], &attr, &tm_run, (void*) &a))
-                printf("\nError during thread creation!\n");
-                break;
+            if ((pthread_create(&t_id[t], &attr, &tm_run, (void*) &a)) == 1){
+                printf("\nError during tm thread creation!\n");
+                exit(1);
+            }
         }
-        if (myrank < 2 * numprocs / 3) {
-            if (pthread_create(&t_id[t], &attr, &mutex_run, (void*) &a))
-                printf("\nError during thread creation!\n");
-                break;
-        } 
+        else if (myrank < 2 * numprocs / 3) {
+			if ((pthread_create(&t_id[t], &attr, &mutex_run, (void*) &a)) == 1){
+                printf("%d \nError during mutex thread creation! %d\n", myrank, t);
+                exit(1);
+			}
+		} 
         else {
-            if (pthread_create(&t_id[t], &attr, &basic_run, (void*) &a))
-                printf("\nError during thread creation!\n");
-                break;
+            if ((pthread_create(&t_id[t], &attr, &basic_run, (void*) &a)) == 1){
+                printf("\nError during basic thread creation!\n");
+                exit(1);
+			}
         }
     }
     pthread_attr_destroy(&attr); //printf("%i: attr destroyed\n",myrank);
@@ -91,7 +87,7 @@ int main(int argc, char** argv) {
         void *thread_ret;
         int rv = pthread_join(t_id[t], &thread_ret);
         if (rv != 0) {
-            printf("%i: Thread %i exited with error %i .\n", myrank, t, rv);
+            //printf("%i: Thread %i exited with error %i .\n", myrank, t, rv);
         } else {
 		if (myrank < numprocs/3) {
 			rest += *((float *) thread_ret);
@@ -103,7 +99,7 @@ int main(int argc, char** argv) {
 			resb += *((float *) thread_ret);
 		}
             free(thread_ret);
-            //printf("%i: %i:  %f: thread joined successfully\n",myrank,t,res);
+            printf("%i: %i: thread joined successfully\n",myrank,t);
         }
     }
 	printf("tm:%f ,mt: %f,bs: %f\n",rest,resm,resb);
@@ -124,11 +120,11 @@ int main(int argc, char** argv) {
     while (flag == 0) {
         MPI_Test(&srequest, &flag, &status);
     }
-    /*for (t = 0; t < SIZE; t++)
+    for (t = 0; t < SIZE; t++)
         if (a[t] != b[t]) {
             printf("rank %i and %i are different\n", myrank, (myrank + (numprocs / 2)) % numprocs);
             break;
-        }*/
+        }
     MPI_Finalize();
     if (myrank != 0) return 0;
     printf("Tm runtime: %f\n", tm_runtime);
@@ -167,7 +163,7 @@ void * tm_run(void * arg) {
 
     t1 = rdtsc();
     *runtime = (float) (t1 - t0) / 1600000000;
-    printf("tm_atomic    ran in %f seconds \n", (float) (t1 - t0) / 1600000000);
+    //printf("tm_atomic    ran in %f seconds \n", (float) (t1 - t0) / 1600000000);
     pthread_exit(runtime);
     return (void*)runtime;
 }
@@ -197,7 +193,7 @@ void * mutex_run(void * arg) {
             }
     t1 = rdtsc();
     *runtime = (float) (t1 - t0) / 1600000000;
-    printf("mutex_lock   ran in %f seconds \n", *runtime);
+    //printf("mutex_lock   ran in %f seconds \n", *runtime);
     pthread_exit(runtime);
     return (void*)runtime;
 }
@@ -227,7 +223,7 @@ void * basic_run(void * arg) {
 
     t1 = rdtsc();
     *runtime = (float) (t1 - t0) / 1600000000;
-    printf("non-atomic   ran in %f seconds \n", *runtime);
+   //printf("non-atomic   ran in %f seconds \n", *runtime);
     pthread_exit(runtime);
     return (void*)runtime;
 } 
