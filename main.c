@@ -3,6 +3,7 @@
 #include <mpi.h>
 #include <pthread.h>
 
+#define CPU_FREQ 1600000000
 #define SIZE 128
 
 pthread_mutex_t lock;
@@ -25,13 +26,13 @@ static __inline__ unsigned long long rdtsc(void){
     return (result);
 }
 
-void * tm_run(void * arg);
-void * mutex_run(void * arg);
-void * basic_run(void * arg);
+void *tm_run(void *arg);
+void *mutex_run(void *arg);
+void *basic_run(void *arg);
 
 int threads;
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
 
     int myrank, numprocs;
 
@@ -62,7 +63,7 @@ int main(int argc, char** argv) {
 
     int t;
     int k;
-    float resb = 0.0,rest=0.0,resm=0.0;
+    float resb = 0.0, rest=0.0, resm=0.0;
 
     // Create threads
 
@@ -159,108 +160,100 @@ int main(int argc, char** argv) {
     return EXIT_SUCCESS;
 }
 
-void * tm_run(void * arg) {
+void *tm_run(void *arg) {
 
-    int v, w, z;
     int b[SIZE];
-    int * a = arg;
-    float * runtime = (float *) malloc(sizeof (float));
+    int *a = arg;
+    float *runtime = (float *) malloc(sizeof (float));
 
-    unsigned long long t0, t1;
+    unsigned long long start;
 
-    for (v = 0; v < SIZE; v++) {
-        a[v] = v;
-        b[v] = -v;
+    for (int i = 0; i < SIZE; i++) {
+        a[i] = i;
+        b[i] = -i;
     }
 
-    t0 = rdtsc();
+    start = rdtsc();
 
-    for (v = 0; v < SIZE; v++) {
-        for (w = 0; w < SIZE; w++) {
-            for (z = 0; z < SIZE; z++) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            for (int k = 0; k < SIZE; k++) {
 
                 #pragma tm_atomic
                 {
-                    a[z] = a[w] + b[v];
+                    a[i] = a[j] + b[k];
                 }
 
             }
         }
     }
 
-    t1 = rdtsc();
-    *runtime = (float) (t1 - t0) / 1600000000;
+    *runtime = (float) (rtdsc() - start) / 1600000000;
 
     pthread_exit(runtime);
 
-    return (void*)runtime;
+    return (void *) runtime;
 }
 
-void * mutex_run(void * arg) {
+void *mutex_run(void *arg) {
 
-    int v, w, z;
-    float res = 0.0;
     int b[SIZE];
-    int * a = arg;
-    float * runtime = (float *) malloc(sizeof (float));
-    unsigned long long t0, t1;
+    int *a = arg;
+    float *runtime = (float *) malloc(sizeof (float));
+    unsigned long long start;
 
-    for (v = 0; v < SIZE; v++) {
-        a[v] = v;
-        b[v] = -v;
+    for (int i = 0; i < SIZE; i++) {
+        a[i] = i;
+        b[i] = -i;
     }
 
-    t0 = rdtsc();
+    start = rdtsc();
 
-    for (v = 0; v < SIZE; v++) {
-        for (w = 0; w < SIZE; w++) {
-            for (z = 0; z < SIZE; z++) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            for (int k = 0; k < SIZE; k++) {
 
                 pthread_mutex_lock(&lock);
-                a[z] = a[w] + b[v];
+                a[i] = a[j] + b[k];
                 pthread_mutex_unlock(&lock);
 
             }
         }
     }
 
-    t1 = rdtsc();
-    *runtime = (float) (t1 - t0) / 1600000000;
+    *runtime = (float) (rtdsc() - start) / 1600000000;
 
     pthread_exit(runtime);
 
-    return (void*)runtime;
+    return (void *) runtime;
 }
 
-void * basic_run(void * arg) {
+void *basic_run(void *arg) {
 
-    int v, w, z;
-    float test = 1.0;
-    int b[SIZE];
-    int * a = arg;
-    float * runtime = (float *) malloc (sizeof(float));
-    unsigned long long t0, t1;
-    for (v = 0; v < SIZE; v++) {
-        a[v] = v;
-        b[v] = -v;
+    int *a = arg, b[SIZE];
+    float *runtime = (float *) malloc(sizeof(float));
+    unsigned long long start;
+
+    for (int i = 0; i < SIZE; i++) {
+        a[i] = i;
+        b[i] = -i;
     }
 
-    t0 = rdtsc();
+    start = rdtsc();
 
-    for (v = 0; v < SIZE; v++) {
-        for (w = 0; w < SIZE; w++) {
-            for (z = 0; z < SIZE; z++) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            for (int k = 0; k < SIZE; k++) {
 
-                a[z] = a[w] + b[v];
+                a[i] = a[j] + b[k];
 
             }
         }
     }
 
-    t1 = rdtsc();
-    *runtime = (float) (t1 - t0) / 1600000000;
+    *runtime = (float) (rtdsc() - start) / 1600000000;
 
     pthread_exit(runtime);
 
-    return (void*)runtime;
-} 
+    return (void *) runtime;
+}
