@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     int *ranks2 = malloc((numprocs / 3)*(sizeof (int)));
     int *ranks3 = malloc((numprocs / 3)*(sizeof (int)));
 
-    int a[SIZE], i;
+    int a[SIZE];
     float tm_runtime = 0.0;
     float mutex_runtime = 0.0;
     float basic_runtime = 0.0;
@@ -61,43 +61,39 @@ int main(int argc, char **argv) {
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-    int t;
-    int k;
     float resb = 0.0, rest=0.0, resm=0.0;
 
     // Create threads
 
-    for (t = 0; t < threads; t++) {
+    for (int i = 0; i < threads; i++) {
 
         if (myrank < numprocs / 3){
-            if ((pthread_create(&t_id[t], &attr, &tm_run, (void*) &a)) == 1){
+            if ((pthread_create(&t_id[i], &attr, &tm_run, (void*) &a)) == 1){
                 fprintf(stderr, "%d: Error during tm thread creation!\n", myrank);
                 return EXIT_FAILURE;
             }
         } else if (myrank < 2 * numprocs / 3) {
-            if ((pthread_create(&t_id[t], &attr, &mutex_run, (void*) &a)) == 1){
+            if ((pthread_create(&t_id[i], &attr, &mutex_run, (void*) &a)) == 1){
                 fprintf(stderr, "%d: Error during mutex thread creation!\n", myrank);
                 return EXIT_FAILURE;
             }
         } else {
-            if ((pthread_create(&t_id[t], &attr, &basic_run, (void*) &a)) == 1){
+            if ((pthread_create(&t_id[i], &attr, &basic_run, (void*) &a)) == 1){
                 fprintf(stderr, "%d: Error during basic thread creation!\n", myrank);
                 return EXIT_FAILURE;
             }
         }
     }
 
-    pthread_attr_destroy(&attr);
-
     // Join threads
 
-    for (t = 0; t < threads; t++) {
+    for (int i = 0; i < threads; i++) {
 
         void *thread_ret;
-        int rv = pthread_join(t_id[t], &thread_ret);
+        int rv = pthread_join(t_id[i], &thread_ret);
 
         if (rv != 0) {
-            fprintf(stderr, "%i: Thread %i exited with error %i!\n", myrank, t, rv);
+            fprintf(stderr, "%d: Thread %d exited with error %d!\n", myrank, i, rv);
         } else {
             if (myrank < numprocs/3) {
                 rest += *((float *) thread_ret);
@@ -110,6 +106,8 @@ int main(int argc, char **argv) {
             free(thread_ret);
         }
     }
+
+    pthread_attr_destroy(&attr);
 
     printf("%f,%f,%f\n", rest, resm, resb);
     MPI_Allreduce(&rest, &tm_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
@@ -162,8 +160,7 @@ int main(int argc, char **argv) {
 
 void *tm_run(void *arg) {
 
-    int b[SIZE];
-    int *a = arg;
+    int *a = arg, b[SIZE];
     float *runtime = (float *) malloc(sizeof (float));
 
     unsigned long long start;
@@ -188,7 +185,7 @@ void *tm_run(void *arg) {
         }
     }
 
-    *runtime = (float) (rtdsc() - start) / 1600000000;
+    *runtime = (float) (rdtsc() - start) / CPU_FREQ;
 
     pthread_exit(runtime);
 
@@ -197,8 +194,7 @@ void *tm_run(void *arg) {
 
 void *mutex_run(void *arg) {
 
-    int b[SIZE];
-    int *a = arg;
+    int *a = arg, b[SIZE];
     float *runtime = (float *) malloc(sizeof (float));
     unsigned long long start;
 
@@ -221,7 +217,7 @@ void *mutex_run(void *arg) {
         }
     }
 
-    *runtime = (float) (rtdsc() - start) / 1600000000;
+    *runtime = (float) (rdtsc() - start) / CPU_FREQ;
 
     pthread_exit(runtime);
 
@@ -251,7 +247,7 @@ void *basic_run(void *arg) {
         }
     }
 
-    *runtime = (float) (rtdsc() - start) / 1600000000;
+    *runtime = (float) (rdtsc() - start) / CPU_FREQ;
 
     pthread_exit(runtime);
 

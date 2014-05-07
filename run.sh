@@ -3,7 +3,7 @@
 echo -n "Compiling..."
 
 module load xl
-mpixlc_r -g -qasm -qtm -lpthread main.c -o tm_test
+mpixlc_r -qasm -qtm main.c -o tm_test -lpthread
 
 if [ $? -ne 0 ]; then
     echo "Compilation error!"
