@@ -1,0 +1,2 @@
+Average rollbacks:		173332
+Average transactions:	4296664
