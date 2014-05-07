@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     int myrank, numprocs;
 
     if (argc < 2) {
-        fprintf(stderr, "Useage: tm_test <threads>\n");
+        fprintf(stderr, "Usage: tm_test <threads>\n");
         return EXIT_FAILURE;
     }
 
