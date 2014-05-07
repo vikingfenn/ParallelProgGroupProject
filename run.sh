@@ -24,9 +24,9 @@ if [ $? -eq 0 ]
     echo -e "Average rollbacks:\t\t$ROLLBACKS" >> averages.txt
     echo -e "Average transactions:\t$TRANSACTIONS" >> averages.txt
     cd ..
-	if [ $? -ne 0 ]; then
-		echo "Error!"
-		exit 0
-	fi
+    if [ $? -ne 0 ]; then
+        echo "Error!"
+        exit 0
+    fi
   done
 fi
