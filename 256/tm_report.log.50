@@ -28,10 +28,10 @@ Thread id: 3
   >> Total serializedOTHER:0
   >> Average retries:      0
 Thread id: 4
-  >> Total rollbacks:      73677
+  >> Total rollbacks:      73523
   >> Total transactions:   2097152
   >> Total serializedJMV:  0
-  >> Total serializedMAXRW:2100
+  >> Total serializedMAXRW:2109
   >> Total serializedOTHER:0
   >> Average retries:      0
 Thread id: 5
@@ -56,10 +56,10 @@ Thread id: 7
   >> Total serializedOTHER:0
   >> Average retries:      0
 Thread id: 8
-  >> Total rollbacks:      97189
+  >> Total rollbacks:      95209
   >> Total transactions:   2097152
   >> Total serializedJMV:  0
-  >> Total serializedMAXRW:1288
+  >> Total serializedMAXRW:1226
   >> Total serializedOTHER:0
   >> Average retries:      0
 Thread id: 9
@@ -448,8 +448,8 @@ Thread id: 63
   >> Total serializedOTHER:0
   >> Average retries:      0
 Aggregated sum across all 64 threads:
-  >> Total rollbacks:      170866
+  >> Total rollbacks:      168732
   >> Total transactions:   4194304
   >> Total serializedJMV:  0
-  >> Total serializedMAXRW:3388
+  >> Total serializedMAXRW:3335
   >> Total serializedOTHER:0

@@ -34,11 +34,8 @@ then
             let "TRANSACTIONS += $(sed -n 452p tm_report.log.$LOG | sed 's/[^0-9]//g')"
         done
 
-        let "ROLLBACKS /= $LOGS"
-        let "TRANSACTIONS /= $LOGS"
-
-        echo -e "Average rollbacks:\t\t$ROLLBACKS" >> averages.txt
-        echo -e "Average transactions:\t$TRANSACTIONS" >> averages.txt
+        echo -e "Total rollbacks:\t$ROLLBACKS" >> totals.txt
+        echo -e "Total transactions:\t$TRANSACTIONS" >> totals.txt
 
         cd ..
 
