@@ -16,8 +16,7 @@ echo " Done"
 export TM_REPORT_ENABLE=YES
 export TM_REPORT_LOG=SUMMARY
 
-if [ $? -eq 0 ]
-then
+if [ $? -eq 0 ]; then
 
     for THREADS in 2 4 8 16 32; do
 

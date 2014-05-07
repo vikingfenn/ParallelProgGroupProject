@@ -8,21 +8,21 @@
 pthread_mutex_t lock;
 
 static __inline__ unsigned long long rdtsc(void){
-  unsigned long long int result = 0;
-  unsigned long int upper, lower, tmp;
-  __asm__ volatile(
-                "0: \n"
-                "\tmftbu %0 \n"
-                "\tmftb %1 \n"
-                "\tmftbu %2 \n"
-                "\tcmpw %2,%0 \n"
-                "\tbne 0b \n"
-                : "=r"(upper),"=r"(lower),"=r"(tmp)
-      );
-  result = upper;
-  result = result << 32;
-  result = result|lower;
-  return (result);
+    unsigned long long int result = 0;
+    unsigned long int upper, lower, tmp;
+    __asm__ volatile(
+        "0: \n"
+        "\tmftbu %0 \n"
+        "\tmftb %1 \n"
+        "\tmftbu %2 \n"
+        "\tcmpw %2,%0 \n"
+        "\tbne 0b \n"
+        : "=r"(upper),"=r"(lower),"=r"(tmp)
+    );
+    result = upper;
+    result = result << 32;
+    result = result|lower;
+    return (result);
 }
 
 void * tm_run(void * arg);
@@ -74,15 +74,15 @@ int main(int argc, char** argv) {
                 return EXIT_FAILURE;
             }
         } else if (myrank < 2 * numprocs / 3) {
-			if ((pthread_create(&t_id[t], &attr, &mutex_run, (void*) &a)) == 1){
+            if ((pthread_create(&t_id[t], &attr, &mutex_run, (void*) &a)) == 1){
                 fprintf(stderr, "%d: Error during mutex thread creation!\n", myrank);
                 return EXIT_FAILURE;
-			}
-		} else {
+            }
+        } else {
             if ((pthread_create(&t_id[t], &attr, &basic_run, (void*) &a)) == 1){
                 fprintf(stderr, "%d: Error during basic thread creation!\n", myrank);
                 return EXIT_FAILURE;
-			}
+            }
         }
     }
 
@@ -98,21 +98,19 @@ int main(int argc, char** argv) {
         if (rv != 0) {
             fprintf(stderr, "%i: Thread %i exited with error %i!\n", myrank, t, rv);
         } else {
-		    if (myrank < numprocs/3) {
-			    rest += *((float *) thread_ret);
-		    }
-		    else if (myrank < 2*numprocs/3) {
-			    resm += *((float *) thread_ret);
-		    }
-		    else {
-			    resb += *((float *) thread_ret);
-		    }
+            if (myrank < numprocs/3) {
+                rest += *((float *) thread_ret);
+            } else if (myrank < 2*numprocs/3) {
+                resm += *((float *) thread_ret);
+            } else {
+                resb += *((float *) thread_ret);
+            }
 
             free(thread_ret);
         }
     }
 
-	printf("%f,%f,%f\n", rest, resm, resb);
+    printf("%f,%f,%f\n", rest, resm, resb);
     MPI_Allreduce(&rest, &tm_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     MPI_Allreduce(&resm, &mutex_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     MPI_Allreduce(&resb, &basic_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
