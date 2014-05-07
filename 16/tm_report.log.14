@@ -1,0 +1,455 @@
+********** Print AtExit **********
+Thread id: 0
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 1
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 2
+  >> Total rollbacks:      1923961
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176425
+  >> Total serializedOTHER:1764244
+  >> Average retries:      0
+Thread id: 3
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 4
+  >> Total rollbacks:      1923905
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176209
+  >> Total serializedOTHER:1762090
+  >> Average retries:      0
+Thread id: 5
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 6
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 7
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 8
+  >> Total rollbacks:      1924453
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176148
+  >> Total serializedOTHER:1761478
+  >> Average retries:      0
+Thread id: 9
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 10
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 11
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 12
+  >> Total rollbacks:      1930152
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176218
+  >> Total serializedOTHER:1762170
+  >> Average retries:      0
+Thread id: 13
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 14
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 15
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 16
+  >> Total rollbacks:      1926635
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:175883
+  >> Total serializedOTHER:1758821
+  >> Average retries:      0
+Thread id: 17
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 18
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 19
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 20
+  >> Total rollbacks:      1931312
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176194
+  >> Total serializedOTHER:1761940
+  >> Average retries:      0
+Thread id: 21
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 22
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 23
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 24
+  >> Total rollbacks:      1927973
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176107
+  >> Total serializedOTHER:1761070
+  >> Average retries:      0
+Thread id: 25
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 26
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 27
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 28
+  >> Total rollbacks:      1927070
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:175990
+  >> Total serializedOTHER:1759900
+  >> Average retries:      0
+Thread id: 29
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 30
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 31
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 32
+  >> Total rollbacks:      1930086
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176142
+  >> Total serializedOTHER:1761419
+  >> Average retries:      0
+Thread id: 33
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 34
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 35
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 36
+  >> Total rollbacks:      1931217
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176228
+  >> Total serializedOTHER:1762280
+  >> Average retries:      0
+Thread id: 37
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 38
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 39
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 40
+  >> Total rollbacks:      1931976
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176145
+  >> Total serializedOTHER:1761441
+  >> Average retries:      0
+Thread id: 41
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 42
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 43
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 44
+  >> Total rollbacks:      1927348
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176119
+  >> Total serializedOTHER:1761185
+  >> Average retries:      0
+Thread id: 45
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 46
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 47
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 48
+  >> Total rollbacks:      1925256
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176295
+  >> Total serializedOTHER:1762950
+  >> Average retries:      0
+Thread id: 49
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 50
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 51
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 52
+  >> Total rollbacks:      1940019
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:175987
+  >> Total serializedOTHER:1759868
+  >> Average retries:      0
+Thread id: 53
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 54
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 55
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 56
+  >> Total rollbacks:      1925317
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176238
+  >> Total serializedOTHER:1762375
+  >> Average retries:      0
+Thread id: 57
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 58
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 59
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 60
+  >> Total rollbacks:      1925304
+  >> Total transactions:   2097152
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:176154
+  >> Total serializedOTHER:1761540
+  >> Average retries:      0
+Thread id: 61
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 62
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Thread id: 63
+  >> Total rollbacks:      0
+  >> Total transactions:   0
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:0
+  >> Total serializedOTHER:0
+  >> Average retries:      0
+Aggregated sum across all 64 threads:
+  >> Total rollbacks:      30851984
+  >> Total transactions:   33554432
+  >> Total serializedJMV:  0
+  >> Total serializedMAXRW:2818482
+  >> Total serializedOTHER:28184771

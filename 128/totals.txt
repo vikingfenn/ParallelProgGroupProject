@@ -1,2 +1,0 @@
-Total rollbacks:	10750947
-Total transactions:	264241152
