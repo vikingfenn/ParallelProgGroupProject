@@ -5,8 +5,7 @@ echo -n "Compiling..."
 module load xl
 mpixlc_r -g -qasm -qtm -lpthread main.c -o tm_test
 
-if [ $? -ne 0 ]
-then
+if [ $? -ne 0 ]; then
     echo "Compilation error!"
     exit 1
 fi
