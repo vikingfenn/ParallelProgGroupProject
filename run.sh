@@ -2,6 +2,8 @@
 module load xl
 mpixlc_r -g -qasm -qtm -lpthread main.c -o tm_test
 rm results.txt
+export TM_REPORT_ENABLE=YES
+export TM_REPORT_LOG=SUMMARY
 if [ $? -eq 0 ]
   then
   for NODES in 63 510 1023 do
