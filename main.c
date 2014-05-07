@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
     float resb = 0.0,rest=0.0,resm=0.0;
     //printf("is this working\n");
     for (t = 0; t < threads; t++) {
-        printf("%d New Thread %d!\n", myrank, t);
+        //printf("%d New Thread %d!\n", myrank, t);
         if (myrank < numprocs / 3){
             if ((pthread_create(&t_id[t], &attr, &tm_run, (void*) &a)) == 1){
                 printf("\nError during tm thread creation!\n");
@@ -99,10 +99,10 @@ int main(int argc, char** argv) {
 			resb += *((float *) thread_ret);
 		}
             free(thread_ret);
-            printf("%i: %i: thread joined successfully\n",myrank,t);
+            //printf("%i: %i: thread joined successfully\n",myrank,t);
         }
     }
-	printf("tm:%f ,mt: %f,bs: %f\n",rest,resm,resb);
+	printf("%f,%f,%f\n", rest, resm, resb);
     MPI_Allreduce(&rest, &tm_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     MPI_Allreduce(&resm, &mutex_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     MPI_Allreduce(&resb, &basic_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
     }
     for (t = 0; t < SIZE; t++)
         if (a[t] != b[t]) {
-            printf("rank %i and %i are different\n", myrank, (myrank + (numprocs / 2)) % numprocs);
+            //printf("rank %i and %i are different\n", myrank, (myrank + (numprocs / 2)) % numprocs);
             break;
         }
     MPI_Finalize();
