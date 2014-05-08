@@ -8,6 +8,7 @@
 
 pthread_mutex_t lock;
 
+//instruction counter used to time trials is returned
 static __inline__ unsigned long long rdtsc(void){
     unsigned long long int result = 0;
     unsigned long int upper, lower, tmp;
@@ -33,9 +34,10 @@ void *basic_run(void *arg);
 int threads;
 
 int main(int argc, char **argv) {
-
+    //Variable initialization
+    
     int myrank, numprocs;
-
+    //the first argument is the number of threads desired
     if (argc < 2) {
         fprintf(stderr, "Usage: tm_test <threads>\n");
         return EXIT_FAILURE;
@@ -63,7 +65,7 @@ int main(int argc, char **argv) {
 
     float resb = 0.0, rest=0.0, resm=0.0;
 
-    // Create threads
+    // Thread creation is attempted
 
     for (int i = 0; i < threads; i++) {
 
@@ -85,7 +87,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Join threads
+    // Threads are joined
 
     for (int i = 0; i < threads; i++) {
 
@@ -108,7 +110,9 @@ int main(int argc, char **argv) {
     }
 
     pthread_attr_destroy(&attr);
-
+    
+    //Allreduce is run to sum the total time all ranks spent doing each computation
+    
     printf("%f,%f,%f\n", rest, resm, resb);
     MPI_Allreduce(&rest, &tm_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     MPI_Allreduce(&resm, &mutex_runtime, 1, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
@@ -118,7 +122,7 @@ int main(int argc, char **argv) {
     MPI_Request rrequest;
     MPI_Request srequest;
     MPI_Status status;
-
+    //Messages are sent across the network to use bisectional bandwidth
     int flag = 0;
     MPI_Irecv(b, SIZE, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &rrequest);
     MPI_Isend(a, SIZE, MPI_INT, (myrank + (numprocs / 2)) % numprocs, 0, MPI_COMM_WORLD, &srequest);
@@ -132,16 +136,7 @@ int main(int argc, char **argv) {
     while (flag == 0) {
         MPI_Test(&srequest, &flag, &status);
     }
-
-    /*
-    for (t = 0; t < SIZE; t++) {
-        if (a[t] != b[t]) {
-            printf("rank %i and %i are different\n", myrank, (myrank + (numprocs / 2)) % numprocs);
-            break;
-        }
-    }
-    */
-
+    //All ranks but 0 are joined, zero prints run times and transactional memory statistics
     MPI_Finalize();
 
     if (myrank != 0) {
@@ -159,23 +154,23 @@ int main(int argc, char **argv) {
 }
 
 void *tm_run(void *arg) {
-
+    //variables are initialized, arg is renamed to a
     int *a = arg, b[SIZE];
     float *runtime = (float *) malloc(sizeof (float));
 
     unsigned long long start;
-
+    //a and b matrices are set
     for (int i = 0; i < SIZE; i++) {
         a[i] = i;
         b[i] = -i;
     }
-
+    //timer starts
     start = rdtsc();
 
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
             for (int k = 0; k < SIZE; k++) {
-
+                //hardware transactional memory's critical region
                 #pragma tm_atomic
                 {
                     a[i] = a[j] + b[k];
@@ -186,7 +181,7 @@ void *tm_run(void *arg) {
     }
 
     *runtime = (float) (rdtsc() - start) / CPU_FREQ;
-
+    //return with total runtime
     pthread_exit(runtime);
 
     return (void *) runtime;
@@ -208,7 +203,7 @@ void *mutex_run(void *arg) {
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
             for (int k = 0; k < SIZE; k++) {
-
+                //the lock is set, variables are manipulated, and lock is unset
                 pthread_mutex_lock(&lock);
                 a[i] = a[j] + b[k];
                 pthread_mutex_unlock(&lock);
@@ -240,7 +235,7 @@ void *basic_run(void *arg) {
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
             for (int k = 0; k < SIZE; k++) {
-
+                //this is unsafe access of memory, is extremely chaotic
                 a[i] = a[j] + b[k];
 
             }
