@@ -137,10 +137,10 @@ int main(int argc, char **argv) {
         MPI_Test(&srequest, &flag, &status);
     }
 
-    //Print a message if the arrays are diffent
+    //Print a message if the arrays are different
     for (int i = 0; i < SIZE; i++) {
         if (a[i] != b[i]) {
-            printf("Ranks %i and %i are different\n", myrank, (myrank + (numprocs / 2)) % numprocs);
+            printf("Ranks %d and %d are different\n", myrank, (myrank + (numprocs / 2)) % numprocs);
             break;
         }
     }
