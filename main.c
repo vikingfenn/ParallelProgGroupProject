@@ -136,6 +136,15 @@ int main(int argc, char **argv) {
     while (flag == 0) {
         MPI_Test(&srequest, &flag, &status);
     }
+
+    //Print a message if the arrays are diffent
+    for (int i = 0; i < SIZE; i++) {
+        if (a[i] != b[i]) {
+            printf("Ranks %i and %i are different\n", myrank, (myrank + (numprocs / 2)) % numprocs);
+            break;
+        }
+    }
+
     //All ranks but 0 are joined, zero prints run times and transactional memory statistics
     MPI_Finalize();
 
